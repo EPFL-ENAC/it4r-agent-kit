@@ -18,9 +18,6 @@ No build, no tests, no dependencies. Markdown and one bash script.
 
 ## Install
 
-This repo is **private** — you need read access to the `EPFL-ENAC` org, and
-your `gh`/git credentials are what the installer uses.
-
 **As a Claude Code plugin (recommended — every skill, every repo, auto-updating):**
 
 From a shell:
@@ -38,7 +35,7 @@ it4r-agent-kit` — you should see three skills and ~380 always-on tokens.
 on clone — read by Claude Code and OpenCode):
 
 ```bash
-git submodule add git@github.com:EPFL-ENAC/it4r-agent-kit.git .claude/skills/it4r-conventions
+git submodule add https://github.com/EPFL-ENAC/it4r-agent-kit.git .claude/skills/it4r-conventions
 git submodule update --remote   # later, to pull updates
 ```
 
