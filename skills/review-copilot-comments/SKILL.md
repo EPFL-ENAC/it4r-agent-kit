@@ -9,10 +9,12 @@ Run this when the user wants to triage automated review on the current branch's 
 
 ## Step 1 — Fetch the comments
 
-Run the bundled script via Bash:
+Run `retrieve-copilot-pr.sh`, which sits in this skill's own directory —
+`${CLAUDE_PLUGIN_ROOT}/skills/review-copilot-comments/` under a plugin install,
+otherwise the directory this `SKILL.md` was read from:
 
 ```
-bash "${CLAUDE_PLUGIN_ROOT}/skills/review-copilot-comments/retrieve-copilot-pr.sh"
+bash "<this skill dir>/retrieve-copilot-pr.sh"
 ```
 
 The script writes raw feedback to `docs/code-review/<issue>-copilot-feedback-<desc>.md` and prints `OUTPUT_FILE=<path>` as its final stdout line. Capture that path.
