@@ -18,12 +18,21 @@ No build, no tests, no dependencies. Markdown and one bash script.
 
 ## Install
 
+This repo is **private** — you need read access to the `EPFL-ENAC` org, and
+your `gh`/git credentials are what the installer uses.
+
 **As a Claude Code plugin (recommended — every skill, every repo, auto-updating):**
 
+From a shell:
+
 ```bash
-/plugin marketplace add EPFL-ENAC/it4r-agent-kit
-/plugin install it4r-agent-kit
+claude plugin marketplace add EPFL-ENAC/it4r-agent-kit
+claude plugin install it4r-agent-kit
 ```
+
+Or the same two commands inside a Claude Code session, as `/plugin marketplace
+add …` and `/plugin install …`. Check what landed with `claude plugin details
+it4r-agent-kit` — you should see three skills and ~380 always-on tokens.
 
 **As a pinned submodule in one project** (committed, so the whole team gets it
 on clone — read by Claude Code and OpenCode):
