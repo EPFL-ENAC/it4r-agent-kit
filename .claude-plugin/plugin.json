@@ -1,0 +1,12 @@
+{
+  "name": "it4r-agent-kit",
+  "version": "0.1.0",
+  "description": "EPFL ENAC IT4R engineering rules and skills for AI coding agents.",
+  "author": {
+    "name": "EPFL ENAC IT4R",
+    "url": "https://github.com/EPFL-ENAC"
+  },
+  "homepage": "https://github.com/EPFL-ENAC/it4r-agent-kit",
+  "repository": "https://github.com/EPFL-ENAC/it4r-agent-kit",
+  "skills": "./skills/"
+}

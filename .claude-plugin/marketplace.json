@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "it4r-agent-kit",
+  "description": "EPFL ENAC IT4R engineering rules and skills for AI coding agents.",
+  "owner": {
+    "name": "EPFL ENAC IT4R",
+    "url": "https://github.com/EPFL-ENAC"
+  },
+  "plugins": [
+    {
+      "name": "it4r-agent-kit",
+      "source": "./",
+      "description": "Team engineering rules (AGENTS.md) plus the plan-conventions and review-copilot-comments skills.",
+      "category": "workflow"
+    }
+  ]
+}
