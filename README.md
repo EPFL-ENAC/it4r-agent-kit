@@ -45,9 +45,22 @@ silently end up without them. This is what
 3. **Copilot / VS Code** — symlink
    `.github/instructions/it4r-agent-kit-rules.md.instructions.md` at the
    vendored file. Instructions files don't follow `@import`, so without this
-   Copilot sees only the local rules.
+   Copilot sees only the local rules. Copilot only picks up an
+   `.instructions.md` file when it carries `applyTo:` frontmatter — an
+   unscoped file is silently ignored. Since `AGENTS.md` stays tool-neutral
+   (no Copilot-specific frontmatter baked in here), stamp it on in your local
+   `sync-agent-rules` target instead, *before* the vendoring header comment
+   (frontmatter has to be the first bytes in the file):
+   ```
+   ---
+   applyTo: "**"
+   ---
+
+   <!-- Vendored from ... -->
+   ```
 4. **The project's own rules file** — keep it, shrink it to what is genuinely
-   its own, and link here for the rest.
+   its own, link here for the rest, and symlink it the same way in step 3 —
+   it needs the same `applyTo:` frontmatter to be honored by Copilot too.
 
 Never edit the vendored copy: change `AGENTS.md` here, then re-sync downstream.
 
