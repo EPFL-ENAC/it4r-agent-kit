@@ -44,11 +44,11 @@ echo "Saving to: $OUTPUT_FILE"
 
   # Fetch Review Summaries
   gh pr view "$PR_NUMBER" --json reviews \
-    --jq '.reviews[] | select(.author.login | test("copilot|github-actions|advanced-security"; "i")) | "### Summary Feedback (\(.author.login))\n\(.body)\n---"'
+    --jq '.reviews[] | select(.author.login | test("copilot|github-actions|advanced-security|enac-ai-reviewer"; "i")) | "### Summary Feedback (\(.author.login))\n\(.body)\n---"'
 
   # Fetch Inline Comments
   gh api "repos/$REPO/pulls/$PR_NUMBER/comments" \
-    --jq '.[] | select(.user.login | test("copilot|github-actions|advanced-security"; "i")) | "### File: `\(.path)` (Line \(.line)) — \(.user.login)\n\n\(.body)\n---"'
+    --jq '.[] | select(.user.login | test("copilot|github-actions|advanced-security|enac-ai-reviewer"; "i")) | "### File: `\(.path)` (Line \(.line)) — \(.user.login)\n\n\(.body)\n---"'
 } > "$OUTPUT_FILE"
 
 # Emit a machine-readable marker on the final line so callers can capture the path.
