@@ -1,6 +1,6 @@
 {
   "name": "it4r-agent-kit",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "EPFL ENAC IT4R engineering rules and skills for AI coding agents.",
   "author": {
     "name": "EPFL ENAC IT4R",
