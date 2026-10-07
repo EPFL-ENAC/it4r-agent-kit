@@ -13,8 +13,12 @@ Two things live here:
   - `plan-conventions` — how issues, plans, and ADRs are filed and trusted.
   - `review-copilot-comments` — triage bot review on the current branch's PR
     into a verified, prioritized checklist.
+  - `sync-agent-rules` — vendor or refresh `AGENTS.md` in a consuming repo
+    (first setup included) and summarize what changed upstream.
+  - `sync-memory-upstream` — promote lessons from an agent's per-repo memory
+    into this kit, as a branch and a PR draft.
 
-No build, no tests, no dependencies. Markdown and one bash script.
+No build, no tests, no dependencies. Markdown and three bash scripts.
 
 ## Install
 
@@ -29,7 +33,8 @@ claude plugin install it4r-agent-kit
 
 Or the same two commands inside a Claude Code session, as `/plugin marketplace
 add …` and `/plugin install …`. Check what landed with `claude plugin details
-it4r-agent-kit` — you should see three skills and ~380 always-on tokens.
+it4r-agent-kit` — you should see five skills; their descriptions are the
+always-on cost.
 
 **Vendored into one project** — committed, so the whole team gets the rules on
 clone with no install step, and a contributor who never touches plugins can't
@@ -38,8 +43,9 @@ silently end up without them. This is what
 
 1. Copy `AGENTS.md` into the project's docs (e.g.
    `docs/src/contributing/it4r-rules.md`) with a header naming the commit it
-   came from, and add a `make sync-agent-rules` target that re-pulls it. `git
-   diff` is then your drift signal, and nobody has to remember to update a pin.
+   came from, and add a `make sync-agent-rules` target that re-pulls it (see
+   [below](#keeping-the-copy-in-sync-make-sync-agent-rules)). `git diff` is
+   then your drift signal, and nobody has to remember to update a pin.
 2. **`CLAUDE.md`** — add `@docs/src/contributing/it4r-rules.md` above the
    project's own rules. The ruleset is then always-on, like any other import.
 3. **Copilot / VS Code** — symlink
@@ -64,10 +70,44 @@ silently end up without them. This is what
 
 Never edit the vendored copy: change `AGENTS.md` here, then re-sync downstream.
 
-*Prefer a submodule?* `git submodule add <url> .claude/it4r-agent-kit` and skip
-step 1 — same wiring otherwise. Vendoring under `.claude/skills/<name>/`
-instead registers the root `SKILL.md` as an invocable skill (on-invoke rather
-than always-on); don't combine that with the plugin or you get two copies of
+### Keeping the copy in sync: `make sync-agent-rules`
+
+Ask your agent for the **`sync-agent-rules`** skill. It finds the copy (or does
+steps 1–4 above the first time), re-vendors it pinned to the kit's current
+`main`, and summarizes what changed upstream. Run it when the kit changes (a
+`plugin.json` version bump is the cue), review the `git diff`, and commit.
+
+Teammates without the plugin use this Make target, which writes the same bytes.
+It resolves the kit's `main` commit once, writes the Copilot frontmatter and a
+header naming that commit, then appends `AGENTS.md` fetched at exactly that
+commit, so header and body can't disagree. Needs an authenticated `gh` and
+`curl`.
+
+```make
+AGENT_RULES := docs/src/contributing/it4r-rules.md
+
+.PHONY: sync-agent-rules
+sync-agent-rules: ## Re-vendor the shared ENAC IT4R rules from it4r-agent-kit
+	@sha=$$(gh api repos/EPFL-ENAC/it4r-agent-kit/commits/main --jq .sha); \
+	{ echo "---"; \
+	  echo "applyTo: \"**\""; \
+	  echo "---"; \
+	  echo; \
+	  echo "<!-- Vendored from https://github.com/EPFL-ENAC/it4r-agent-kit @ $$(printf %.7s "$$sha")"; \
+	  echo "     Do not edit here — edit AGENTS.md upstream, then run \`make sync-agent-rules\`. -->"; \
+	  echo; \
+	  curl -fsSL https://raw.githubusercontent.com/EPFL-ENAC/it4r-agent-kit/$$sha/AGENTS.md; \
+	} > $(AGENT_RULES)
+	@git diff --stat -- $(AGENT_RULES)
+```
+
+This is the target co2-calculator runs. Point `AGENT_RULES` at your own path.
+
+*No submodules.* A submodule adds a checkout step that every contributor and
+CI job can skip; the vendored file plus a sync target keeps every property that
+matters. Vendoring the whole kit under `.claude/skills/<name>/` instead
+registers the root `SKILL.md` as an invocable skill (on-invoke rather than
+always-on); don't combine that with the plugin or you get two copies of
 `it4r-conventions`.
 
 **Rules are vendored; skills are not.** Rules have to apply whether or not
@@ -100,5 +140,6 @@ rulebooks drift, which is the failure this repo exists to prevent.
 ## Contributing
 
 Small PRs. A rule earns its place by having cost us something concrete — say
-what, in one line, in the PR. If a rule is true for exactly one project, it
+what, in one line, in the PR. The `sync-memory-upstream` skill drafts such PRs
+from what agents saved in their per-repo memory. If a rule is true for exactly one project, it
 belongs in that project's local rules file, not here.

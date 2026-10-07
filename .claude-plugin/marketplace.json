@@ -10,7 +10,7 @@
     {
       "name": "it4r-agent-kit",
       "source": "./",
-      "description": "Team engineering rules (AGENTS.md) plus the plan-conventions and review-copilot-comments skills.",
+      "description": "Team engineering rules (AGENTS.md) plus the plan-conventions, review-copilot-comments, sync-agent-rules and sync-memory-upstream skills.",
       "category": "workflow"
     }
   ]
