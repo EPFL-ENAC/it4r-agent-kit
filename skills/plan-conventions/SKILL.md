@@ -14,7 +14,7 @@ no way to know what shipped or why.
 | Artifact                   | Location                                     |
 | -------------------------- | -------------------------------------------- |
 | Implementation plans       | `docs/src/implementation-plans/`              |
-| Abandoned plans            | `docs/src/implementation-plans/archive/`      |
+| Closed plans (rejected, withdrawn, superseded) | `docs/src/implementation-plans/archive/` |
 | ADRs                       | `docs/src/architecture-decision-records/`     |
 | Bot-review / code-review notes | `docs/code-review/`                       |
 
@@ -23,24 +23,43 @@ propose moving them out.
 
 ## File shape
 
-Name: `<issue-id>-<kebab-slug>.md`. Frontmatter on every plan and ADR:
+Name: `<issue-id>-<kebab-slug>.md`. Frontmatter on every plan:
 
 ```yaml
 ---
-status: draft | accepted | delivered | superseded
+status: draft | accepted | in-progress | delivered | deferred | rejected | withdrawn | superseded
 issue: 310b # GitHub issue or sub-issue id
 last_updated: 2026-05-05
 summary: one-line abstract
+supersedes: 2101-old-approach.md    # optional: plans this one replaces
+superseded_by: 2950-new-approach.md # required when status is superseded
 ---
 ```
 
-- `draft` — speculative; do not cite as a decision. Draft plans do land in the
-  repo, so presence in the tree implies nothing.
-- `accepted` — agreed approach; implementation may be partial.
-- `delivered` — shipped; matches the main-branch code at `last_updated`.
-- `superseded` — history only; follow the link to the successor.
+The lifecycle follows Python PEPs and Kubernetes KEPs.
 
-Treat any plan older than ~6 months without `delivered` or `superseded` as
+- **Open**
+  - `draft` — being written, not agreed. Don't cite it as a decision: presence
+    in the tree implies nothing.
+  - `accepted` — agreed approach; work not started.
+  - `in-progress` — being implemented; partly shipped.
+  - `deferred` — agreed but parked. Say why, and what would resume it.
+- **Done:** `delivered` — shipped; matches the main-branch code at
+  `last_updated`.
+- **Closed** (move to `archive/`)
+  - `rejected` — we decided not to do it. Record why.
+  - `withdrawn` — dropped before a decision, or no longer needed.
+  - `superseded` — replaced by another plan, named in `superseded_by:`.
+
+Links go both ways, like the RFC `Obsoletes` / `Obsoleted by` headers: a plan
+marked `superseded` names its successor, and the successor lists it in
+`supersedes:`. Docs generators must know all eight statuses; an unknown value
+breaks the index.
+
+ADRs use `Proposed` / `Accepted` / `Deprecated` / `Superseded`, with the same
+two links.
+
+Treat any plan still `draft`, `accepted` or `in-progress` after ~6 months as
 suspect and verify against code.
 
 ## Rules

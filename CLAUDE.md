@@ -13,5 +13,5 @@ Claude-Code-specific:
   `/plugin marketplace add EPFL-ENAC/it4r-agent-kit`.
 - It is **also** a single skill: `SKILL.md` at the root means the whole repo can
   be vendored into `.claude/skills/<name>/` (see `README.md`; no submodules).
-- There is no build and no tests. The deliverables are markdown and two bash
+- There is no build and no tests. The deliverables are markdown and three bash
   scripts.

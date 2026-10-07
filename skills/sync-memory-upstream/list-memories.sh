@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Print the agent memory index (MEMORY.md) of the current repo, or of every
-# repo on this machine with --all, so the upstream-memory skill can sort them.
+# repo on this machine with --all, so the sync-memory-upstream skill can sort them.
 # Usage: list-memories.sh [--all]
 set -euo pipefail
 

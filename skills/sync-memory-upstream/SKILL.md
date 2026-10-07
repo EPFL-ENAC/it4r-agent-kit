@@ -1,9 +1,9 @@
 ---
-name: upstream-memory
-description: Use when the user wants to promote lessons from an AI agent's per-repo memory into it4r-agent-kit — "update the kit from memory", "what did the agents learn that the team should know", "harvest memories" — or after a session that saved several feedback memories. Sorts each memory into team rule, project rule, personal preference or state, drafts AGENTS.md and skill edits on a kit branch with one cost line per rule, and never pushes without the user's go.
+name: sync-memory-upstream
+description: Use when the user wants to promote lessons from an AI agent's per-repo memory into it4r-agent-kit — "sync memory upstream", "update the kit from memory", "what did the agents learn that the team should know" — or after a session that saved several feedback memories. Sorts each memory into team rule, project rule, personal preference or state, drafts AGENTS.md and skill edits on a kit branch with one cost line per rule, and never pushes without the user's go.
 ---
 
-# Upstream agent memory into the kit
+# Sync agent memory upstream into the kit
 
 Agents keep per-repo memory (Claude Code: `~/.claude/projects/<repo-path-slug>/memory/`,
 indexed by `MEMORY.md`). A lesson that holds for every IT4R repo is wasted
@@ -12,9 +12,14 @@ into the kit, where every agent and every teammate gets them.
 
 ## 1. Collect
 
-- Run `bash ${CLAUDE_PLUGIN_ROOT}/skills/upstream-memory/list-memories.sh` for
-  the current repo, or with `--all` for every repo on this machine. Read the
-  memory files behind the index lines, not just the index.
+- Run `list-memories.sh` from this skill's directory
+  (`${CLAUDE_PLUGIN_ROOT}/skills/sync-memory-upstream/` under a plugin install,
+  otherwise the directory this `SKILL.md` was read from) for the current repo,
+  or with `--all` for every repo on this machine:
+  ```
+  bash "<this skill dir>/list-memories.sh" [--all]
+  ```
+  Read the memory files behind the index lines, not just the index.
 - Pull a fresh kit clone (`git pull --ff-only` on `main`) and read `AGENTS.md`
   and `skills/` from it, not from a plugin cache.
 
@@ -60,6 +65,7 @@ vocabulary: list it as a decision for the team.
 - Work on a branch. Don't push or open the PR until the user says so.
 - PR body: one generic cost line per rule, plus a separate "Decisions for the
   team" section for anything that changes policy or vocabulary.
-- After merge, every vendoring repo runs `make sync-agent-rules` (README).
+- After merge, every vendoring repo re-syncs with the `sync-agent-rules` skill
+  (or `make sync-agent-rules`).
 - Offer, don't do: delete the memories the kit now covers, so the two copies
   can't drift.

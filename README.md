@@ -13,10 +13,12 @@ Two things live here:
   - `plan-conventions` — how issues, plans, and ADRs are filed and trusted.
   - `review-copilot-comments` — triage bot review on the current branch's PR
     into a verified, prioritized checklist.
-  - `upstream-memory` — promote lessons from an agent's per-repo memory into
-    this kit, as a branch and a PR draft.
+  - `sync-agent-rules` — vendor or refresh `AGENTS.md` in a consuming repo
+    (first setup included) and summarize what changed upstream.
+  - `sync-memory-upstream` — promote lessons from an agent's per-repo memory
+    into this kit, as a branch and a PR draft.
 
-No build, no tests, no dependencies. Markdown and two bash scripts.
+No build, no tests, no dependencies. Markdown and three bash scripts.
 
 ## Install
 
@@ -31,7 +33,7 @@ claude plugin install it4r-agent-kit
 
 Or the same two commands inside a Claude Code session, as `/plugin marketplace
 add …` and `/plugin install …`. Check what landed with `claude plugin details
-it4r-agent-kit` — you should see four skills; their descriptions are the
+it4r-agent-kit` — you should see five skills; their descriptions are the
 always-on cost.
 
 **Vendored into one project** — committed, so the whole team gets the rules on
@@ -70,11 +72,16 @@ Never edit the vendored copy: change `AGENTS.md` here, then re-sync downstream.
 
 ### Keeping the copy in sync: `make sync-agent-rules`
 
-The target resolves the kit's current `main` commit once, writes the Copilot
-frontmatter and a header naming that commit, then appends `AGENTS.md` fetched
-at exactly that commit, so header and body can't disagree. Run it when the kit
-changes (a `plugin.json` version bump is the cue), review the `git diff`, and
-commit it. Needs an authenticated `gh` and `curl`.
+Ask your agent for the **`sync-agent-rules`** skill. It finds the copy (or does
+steps 1–4 above the first time), re-vendors it pinned to the kit's current
+`main`, and summarizes what changed upstream. Run it when the kit changes (a
+`plugin.json` version bump is the cue), review the `git diff`, and commit.
+
+Teammates without the plugin use this Make target, which writes the same bytes.
+It resolves the kit's `main` commit once, writes the Copilot frontmatter and a
+header naming that commit, then appends `AGENTS.md` fetched at exactly that
+commit, so header and body can't disagree. Needs an authenticated `gh` and
+`curl`.
 
 ```make
 AGENT_RULES := docs/src/contributing/it4r-rules.md
@@ -133,5 +140,6 @@ rulebooks drift, which is the failure this repo exists to prevent.
 ## Contributing
 
 Small PRs. A rule earns its place by having cost us something concrete — say
-what, in one line, in the PR. If a rule is true for exactly one project, it
+what, in one line, in the PR. The `sync-memory-upstream` skill drafts such PRs
+from what agents saved in their per-repo memory. If a rule is true for exactly one project, it
 belongs in that project's local rules file, not here.
