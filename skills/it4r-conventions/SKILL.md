@@ -18,6 +18,7 @@ code wins over both.
 - Backend is the single source of truth — never reimplement a formula client-side.
 - `route → service → repo`; the commit happens in the route; no SQL in routes.
 - No silent fallbacks — `raise`, don't log-and-continue.
+- Never commit secrets; agents never run anything against a shared database.
 - Frontend gates on permission keys, never on roles.
 - No backward-compat paths, no type suppressions, no defensive programming.
 - Every bug fix ships with a regression test.

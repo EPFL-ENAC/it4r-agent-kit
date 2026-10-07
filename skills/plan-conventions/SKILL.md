@@ -1,6 +1,6 @@
 ---
 name: plan-conventions
-description: Use when starting an issue, writing or updating an implementation plan or ADR, or judging whether a doc in the repo can be trusted. Covers the ENAC IT4R source-of-truth hierarchy, plan file naming and frontmatter (status/issue/last_updated/summary), where plans and review notes live, and when a plan must be backfilled.
+description: Use when opening or writing a GitHub issue, starting work on an issue, writing or updating an implementation plan or ADR, or judging whether a doc in the repo can be trusted. Covers the ENAC IT4R issue title and TL;DR convention, the source-of-truth hierarchy, plan file naming and frontmatter (status/issue/last_updated/summary), where plans and review notes live, and when a plan must be backfilled.
 ---
 
 # Plan and doc conventions
@@ -54,6 +54,29 @@ suspect and verify against code.
   `*-copilot-feedback-*` files out of the plans directory: they capture bot
   feedback on a PR, not the design.
 - Dates are absolute (`2026-05-05`), never "last week".
+
+## Issues
+
+Issues are read by product owners, not just developers: lead with intent.
+
+- **Title:** `[PREFIX](Scope) Short plain description`. Prefix is `[BUG]`,
+  `[FEAT]`, `[PERF]`, `[SPECS]` (a decision or spec is needed before code) or
+  `[TASK]` (standalone chore: refactor, CI, cleanup). Scope is the module or
+  tool (`Results`, `CI`, `Deployment`). Don't append `(#N)` by hand; a
+  workflow does it where one exists.
+- **Body opens with a TL;DR**, then `---`:
+  ```
+  **TL;DR**
+  - **What:** …
+  - **Why:** …
+  - **User impact:** …
+  - **Effort:** small | medium   (or **Blocked by:** #N / **Decision needed:** …)
+  ```
+- **Then, in order:** what users experience → why it matters → what we propose
+  (refactor first, then behaviour) → decisions needed → done when (checklist) →
+  technical notes. File paths and symbols go last.
+- **Labels** must already exist (`gh issue create` fails on a missing one); the
+  type label sets the branch prefix (`bug` → `fix/`, `refactor` → `refactor/`).
 
 ## Source-of-truth hierarchy
 
