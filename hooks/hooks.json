@@ -2,17 +2,24 @@
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/credential-guard.sh",
+            "args": [],
+            "statusMessage": "Checking for credentials..."
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "credential-guard.sh",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/credential-guard.sh",
+            "args": [],
             "statusMessage": "Checking for credentials..."
-          },
-          {
-            "type": "command",
-            "command": "check-secrets.sh",
-            "statusMessage": "Checking for secrets..."
           }
         ]
       }

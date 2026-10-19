@@ -20,7 +20,13 @@
 
 set -uo pipefail
 
-command -v jq >/dev/null 2>&1 || exit 0
+# jq is a hard dependency: without it the guard cannot read tool input and
+# would be silently blind. Stay fail-open (a guard must not break every tool
+# call) but say so on every invocation — a disabled guard must be visible.
+if ! command -v jq >/dev/null 2>&1; then
+  printf '%s\n' '{"systemMessage":"credential-guard: jq is not installed — the credential guard is DISABLED and secrets are not being checked. Install jq (apt/brew) to restore it."}'
+  exit 0
+fi
 INPUT=$(cat)
 TOOL=$(jq -r '.tool_name // empty' <<<"$INPUT")
 
@@ -34,14 +40,17 @@ repo_dir() {
 }
 
 # The repo's own copy is authoritative where it exists, so the rules a team
-# reviews are the rules that run; the bundled copy covers every other repo.
+# reviews are the rules that run; otherwise fall back to the copy bundled
+# next to this script, so the guard is self-contained and works in any repo
+# with no manual install step.
 resolve_scanner() {
-  local repo
+  local repo self_dir
   repo=$(git -C "$1" rev-parse --show-toplevel 2>/dev/null) || return 1
   if [ -f "$repo/scripts/check-secrets.sh" ]; then
     printf '%s\n' "$repo/scripts/check-secrets.sh"
   else
-    printf '%s\n' "$HOME/.claude/hooks/check-secrets.sh"
+    self_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    printf '%s\n' "$self_dir/check-secrets.sh"
   fi
 }
 
