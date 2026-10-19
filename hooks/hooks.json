@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "credential-guard.sh",
+            "statusMessage": "Checking for credentials..."
+          },
+          {
+            "type": "command",
+            "command": "check-secrets.sh",
+            "statusMessage": "Checking for secrets..."
+          }
+        ]
+      }
+    ]
+  }
+}
