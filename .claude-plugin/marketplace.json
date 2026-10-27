@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "it4r-agent-kit",
-  "description": "EPFL ENAC IT4R engineering rules and skills for AI coding agents.",
+  "description": "EPFL ENAC IT4R engineering rules, skills, and a PreToolUse credential guard for AI coding agents.",
   "owner": {
     "name": "EPFL ENAC IT4R",
     "url": "https://github.com/EPFL-ENAC"
@@ -10,7 +10,7 @@
     {
       "name": "it4r-agent-kit",
       "source": "./",
-      "description": "Team engineering rules (AGENTS.md) plus the plan-conventions, review-copilot-comments, sync-agent-rules and sync-memory-upstream skills.",
+      "description": "Team engineering rules (AGENTS.md), the plan-conventions, review-copilot-comments, sync-agent-rules and sync-memory-upstream skills, and a PreToolUse credential guard.",
       "category": "workflow"
     }
   ]

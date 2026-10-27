@@ -3,7 +3,7 @@
 The **ENAC IT4R** team's engineering rules and reusable skills for AI coding
 agents (Claude Code, OpenCode, Cursor, Codex, …).
 
-Two things live here:
+Three things live here:
 
 - **`AGENTS.md`** — the tool-neutral ruleset: architecture invariants, style
   rules, performance budget, workflow. Distilled from what we found
@@ -17,8 +17,12 @@ Two things live here:
     (first setup included) and summarize what changed upstream.
   - `sync-memory-upstream` — promote lessons from an agent's per-repo memory
     into this kit, as a branch and a PR draft.
+- **`hooks/`** — a credential guard the plugin registers for free:
+  `credential-guard.sh` refuses the agent's own `Write`/`Edit`/`Bash` call
+  when it would put a live credential on disk or into a commit, backed by the
+  `check-secrets.sh` scanner. See [Credential guard](#credential-guard).
 
-No build, no tests, no dependencies. Markdown and three bash scripts.
+No build, no tests, no dependencies. Markdown and five bash scripts.
 
 ## Install
 
@@ -125,6 +129,84 @@ The consuming repo keeps a **short local rules file** for what is genuinely its
 own — commands, branch exceptions, perf numbers, module patterns, anything
 situational — and links here for the rest. Don't copy the ruleset: two
 rulebooks drift, which is the failure this repo exists to prevent.
+
+## Credential guard
+
+A live dev-database DSN reached a public repo from this team once, past the
+only guard in its path — a lefthook pre-commit step — because
+`git commit --no-verify` skips lefthook entirely, and the model will pass
+that flag on retry. So the check ships at two moments, one of them where
+`--no-verify` cannot reach:
+
+- **`credential-guard.sh`** — a Claude Code `PreToolUse` hook (registered by
+  `hooks/hooks.json` on every plugin install; check with
+  `claude plugin details it4r-agent-kit`). It scans the content of `Write`,
+  `Edit` and `NotebookEdit` calls before it reaches disk — the actual root
+  cause, since nothing runs between the model generating content and staging
+  it — and refuses `git add` / `git commit` while anything uncommitted still
+  carries a secret.
+- **`check-secrets.sh`** — the scanner both moments share, also usable
+  standalone: the staged diff (default, what lefthook runs), `--pending`
+  (everything uncommitted, staged or not), `--files a b…`, or
+  `--stdin LABEL`.
+
+Findings name the file, line and rule; the guard adds what the leak would
+mean (the target repo's remote and visibility) and the remediation: read the
+value from the environment instead. A path git will never track cannot leak,
+so gitignored files are skipped — writing a real secret into `backend/.env`
+stays frictionless. A line that legitimately holds a secret-shaped string
+(documentation, a test fixture) carries `pragma: allowlist secret`, so the
+exception is visible in review. The guard needs `jq`; without it, it stays
+fail-open — a guard must not break every tool call — but announces on every
+invocation that it is disabled.
+
+### Without the plugin
+
+The guard prefers the repo's own copy of the scanner when it exists
+(`scripts/check-secrets.sh`), so the rules a team reviews are the rules that
+run; the copy bundled next to the guard covers the rest. Commit both scripts
+and wire both moments by hand:
+
+```yaml
+# lefthook.yml — the moment a human commits
+pre-commit:
+  commands:
+    check-secrets:
+      run: bash scripts/check-secrets.sh
+```
+
+```json
+// .claude/settings.json — the moment the agent acts
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/scripts/credential-guard.sh",
+            "args": []
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/scripts/credential-guard.sh",
+            "args": []
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`args: []` keeps the hook in exec form, so the substituted path survives
+spaces in the install directory.
 
 ## Related
 
