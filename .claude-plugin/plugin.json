@@ -1,7 +1,7 @@
 {
   "name": "it4r-agent-kit",
-  "version": "1.1.0",
-  "description": "EPFL ENAC IT4R engineering rules and skills for AI coding agents.",
+  "version": "1.2.0",
+  "description": "EPFL ENAC IT4R engineering rules, skills, and a PreToolUse credential guard for AI coding agents.",
   "author": {
     "name": "EPFL ENAC IT4R",
     "url": "https://github.com/EPFL-ENAC"
