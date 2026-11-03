@@ -67,6 +67,10 @@ Not preferences. Load-bearing.
   the code change. Never hand-author Alembic migrations — generate them, then
   prune false-positive `drop_index` calls. Keep manual edits to a generated
   migration minimal: anything expressible in model code belongs in model code.
+  `alembic.ini` runs `ruff format` and `ruff check --fix` as post-write hooks,
+  so a generated revision passes CI as written. Deploys run `alembic upgrade
+  head` once, in a Helm `post-install,pre-upgrade` hook Job, never in a per-pod
+  init container.
   Browser storage and exported files count too: version them, migrate old
   versions, and fail loudly on an unknown one. Don't persist a derived value
   next to its inputs unless it's a deliberate, recomputable cache.
