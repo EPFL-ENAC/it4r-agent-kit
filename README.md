@@ -28,7 +28,13 @@ No build, no tests, no dependencies. Markdown and five bash scripts.
 
 **As a Claude Code plugin (recommended — every skill, every repo, auto-updating):**
 
-From a shell:
+Inside a Claude Code session (2.1.275 or later), in one step:
+
+```text
+/plugin install it4r-agent-kit --marketplace EPFL-ENAC/it4r-agent-kit
+```
+
+Or from a shell:
 
 ```bash
 claude plugin marketplace add EPFL-ENAC/it4r-agent-kit
