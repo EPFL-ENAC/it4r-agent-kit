@@ -17,6 +17,8 @@ Three things live here:
     (first setup included) and summarize what changed upstream.
   - `sync-memory-upstream` — promote lessons from an agent's per-repo memory
     into this kit, as a branch and a PR draft.
+  - `tps` — orchestrate parallel builder agents in worktrees: tickets,
+    merge flow, verification, and when to stop and ask.
 - **`hooks/`** — a credential guard the plugin registers for free:
   `credential-guard.sh` refuses the agent's own `Write`/`Edit`/`Bash` call
   when it would put a live credential on disk or into a commit, backed by the
@@ -37,7 +39,7 @@ claude plugin install it4r-agent-kit
 
 Or the same two commands inside a Claude Code session, as `/plugin marketplace
 add …` and `/plugin install …`. Check what landed with `claude plugin details
-it4r-agent-kit` — you should see five skills; their descriptions are the
+it4r-agent-kit` — you should see six skills; their descriptions are the
 always-on cost.
 
 **Vendored into one project** — committed, so the whole team gets the rules on
