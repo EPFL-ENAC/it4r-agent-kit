@@ -10,7 +10,7 @@
     {
       "name": "it4r-agent-kit",
       "source": "./",
-      "description": "Team engineering rules (AGENTS.md), the plan-conventions, review-copilot-comments, sync-agent-rules and sync-memory-upstream skills, and a PreToolUse credential guard.",
+      "description": "Team engineering rules (AGENTS.md), the plan-conventions, review-copilot-comments, sync-agent-rules, sync-memory-upstream and tps skills, and a PreToolUse credential guard.",
       "category": "workflow"
     }
   ]
