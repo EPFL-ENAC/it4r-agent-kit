@@ -10,6 +10,8 @@ Three things live here:
   load-bearing on our FastAPI + SQLModel + Alembic / Vue + Quasar + TypeScript
   projects.
 - **`skills/`** — task skills that aren't tied to one project:
+  - `doc-conventions` — how documentation is written: the 10-minute rule,
+    ASD-STE100 Simplified Technical English, length targets, formatter and docs-site rules.
   - `plan-conventions` — how issues, plans, and ADRs are filed and trusted.
   - `review-copilot-comments` — triage bot review on the current branch's PR
     into a verified, prioritized checklist.
@@ -45,7 +47,7 @@ claude plugin install it4r-agent-kit
 
 Or the same two commands inside a Claude Code session, as `/plugin marketplace
 add …` and `/plugin install …`. Check what landed with `claude plugin details
-it4r-agent-kit` — you should see six skills; their descriptions are the
+it4r-agent-kit` — you should see seven skills; their descriptions are the
 always-on cost.
 
 **Vendored into one project** — committed, so the whole team gets the rules on
@@ -223,6 +225,12 @@ spaces in the install directory.
 - [`it4r-mcp`](https://github.com/EPFL-ENAC/it4r-mcp) — MCP server for when an
   agent needs to *call* something live. Conventions belong here; tools belong
   there.
+- [`AminBlg/SimpleEnglish`](https://github.com/AminBlg/SimpleEnglish): the
+  `simple-english` skill that `doc-conventions` uses for ASD-STE100
+  Simplified Technical English. Upstream, MIT. Install it from there with
+  `claude plugin marketplace add AminBlg/SimpleEnglish && claude plugin
+  install simple-english@simple-english`. For a different agent, use
+  `npx skills add AminBlg/SimpleEnglish`.
 - [`agamm/claude-code-owasp`](https://github.com/agamm/claude-code-owasp) — the
   `owasp-security` skill several of our repos vendor. Upstream, MIT; install it
   from there rather than copying, so you get the updates.

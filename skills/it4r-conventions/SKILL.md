@@ -24,3 +24,5 @@ code wins over both.
 - Every bug fix ships with a regression test.
 
 The `plan-conventions` skill covers how issues, plans, and ADRs are filed.
+The `doc-conventions` skill covers how documentation is written (ASD-STE100
+Simplified Technical English).
