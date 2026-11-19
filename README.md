@@ -21,6 +21,13 @@ Three things live here:
     into this kit, as a branch and a PR draft.
   - `tps` — orchestrate parallel builder agents in worktrees: tickets,
     merge flow, verification, and when to stop and ask.
+  - `quiz-me` — a short adaptive quiz on the concepts of the finished task:
+    recall, teach-back, and transfer questions, weighted toward the points
+    where the user hesitated.
+  - `challenge-me` — stress-test the technical decisions of the finished
+    task: justification, alternatives, overlooked trade-offs.
+  - `socratic-mode` — work a task without being handed the answer: guiding
+    questions and hints one step at a time, the user writes the code.
 - **`hooks/`** — a credential guard the plugin registers for free:
   `credential-guard.sh` refuses the agent's own `Write`/`Edit`/`Bash` call
   when it would put a live credential on disk or into a commit, backed by the
@@ -47,7 +54,7 @@ claude plugin install it4r-agent-kit
 
 Or the same two commands inside a Claude Code session, as `/plugin marketplace
 add …` and `/plugin install …`. Check what landed with `claude plugin details
-it4r-agent-kit` — you should see seven skills; their descriptions are the
+it4r-agent-kit` — you should see nine skills; their descriptions are the
 always-on cost.
 
 **Vendored into one project** — committed, so the whole team gets the rules on
